@@ -54,6 +54,9 @@ export interface UpdateChannelFundingParams {
   token?: Address;
   amount: Uint256;
 }
+
+type SyncChannelParams = {channelId: ChannelId};
+
 export type WalletInterface = {
   // App utilities
   getParticipant(): Promise<Participant | undefined>;
@@ -65,6 +68,7 @@ export type WalletInterface = {
   closeChannel(args: CloseChannelParams): SingleChannelResult;
   getChannels(): MultipleChannelResult;
   getState(args: GetStateParams): SingleChannelResult;
+  syncChannel(args: SyncChannelParams): SingleChannelResult;
 
   updateChannelFunding(args: UpdateChannelFundingParams): void;
 
@@ -76,6 +80,10 @@ export type WalletInterface = {
 };
 
 export class Wallet implements WalletInterface {
+  public async syncChannel(_args: SyncChannelParams): SingleChannelResult {
+    throw 'Unimplemented';
+  }
+
   public async getParticipant(): Promise<Participant | undefined> {
     let participant: Participant | undefined = undefined;
 
