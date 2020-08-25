@@ -181,7 +181,7 @@ export class ChannelWallet {
     if (document.getElementById('root')) {
       ReactDOM.render(
         React.createElement(WalletUi, {workflow: machine}),
-        document.getElementById('root')
+        document.getElementById('workflow-ui-container')
       );
     }
   }

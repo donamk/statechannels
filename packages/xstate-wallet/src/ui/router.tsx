@@ -12,7 +12,7 @@ interface Props {
   wallet: ChannelWallet;
 }
 
-const App = (props: Props) => (
+const Router = (props: Props) => (
   <BrowserRouter>
     <main>
       <Switch>
@@ -25,4 +25,4 @@ const App = (props: Props) => (
   </BrowserRouter>
 );
 
-export default App;
+export default Router;

@@ -11,7 +11,7 @@ import {logger} from './logger';
 import {CLEAR_STORAGE_ON_START, USE_INDEXED_DB, ADD_LOGS, NODE_ENV, GIT_VERSION} from './config';
 import {MessagingService} from './messaging';
 import {ChannelWallet} from './channel-wallet';
-import App from './ui/app';
+import Router from './ui/router';
 
 if (NODE_ENV === 'production') {
   Sentry.init({
@@ -60,5 +60,5 @@ const log = logger.trace.bind(logger);
   };
   window.parent.postMessage(walletReadyMessage, '*');
 
-  ReactDOM.render(App({wallet: channelWallet}), document.getElementById('root'));
+  ReactDOM.render(Router({wallet: channelWallet}), document.getElementById('router-container'));
 })();

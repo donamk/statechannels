@@ -37,6 +37,10 @@
     <meta name="description" content="A State Channels Wallet." />
     <title>State Channels Wallet</title>
   </head>
-  <% if (process.env.WINDOW_CRYPTO_POLYFILL ) { %> Using window-crypto package as a polyfill <% } %>
-  <div id="root"></div>
+  <body>
+    <% if (process.env.WINDOW_CRYPTO_POLYFILL ) { %> Using window-crypto package as a polyfill <% }
+    %>
+    <div id="router-container"></div>
+    <div id="workflow-ui-container"></div>
+  </body>
 </html>
