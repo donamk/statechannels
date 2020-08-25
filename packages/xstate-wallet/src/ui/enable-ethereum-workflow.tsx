@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {EventData} from 'xstate';
 import './wallet.scss';
 import {Button, Box, Flex, Icon, Text, MetaMaskButton, Flash, Heading} from 'rimble-ui';
@@ -6,7 +6,6 @@ import {Button, Box, Flex, Icon, Text, MetaMaskButton, Flash, Heading} from 'rim
 import ConnectionBanner from '@rimble/connection-banner';
 import RimbleUtils from '@rimble/utils';
 import {WorkflowState} from '../workflows/ethereum-enable';
-import {WindowContext} from './window-context';
 import {CHAIN_NETWORK_ID} from '../config';
 import {track} from '../segment-analytics';
 
@@ -24,7 +23,6 @@ export const EnableEthereum = (props: Props) => {
 
   const targetNetwork = Number(CHAIN_NETWORK_ID);
 
-  const window = useContext(WindowContext);
   const networkVersion = window?.ethereum?.networkVersion;
   const currentNetwork = networkVersion && Number(networkVersion);
 

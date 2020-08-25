@@ -1,5 +1,4 @@
 import React from 'react';
-import {WindowContext} from './window-context';
 import {useService} from '@xstate/react';
 import './wallet.scss';
 import {ApplicationWorkflow} from './application-workflow';
@@ -23,19 +22,17 @@ export const Wallet = (props: Props) => {
   const [current, send] = useService(workflow.service);
 
   return (
-    <WindowContext.Provider value={window}>
-      <Layout>
-        {workflow.id === 'application-workflow' && (
-          <ApplicationWorkflow current={current} send={send} />
-        )}
-        {workflow.id === 'enable-ethereum' && <EnableEthereum current={current} send={send} />}
-        {workflow.id === 'approve-budget-and-fund' && (
-          <ApproveBudgetAndFund service={workflow.service} />
-        )}
-        {workflow.id === 'close-and-withdraw' && (
-          <CloseLedgerAndWithdraw service={workflow.service} />
-        )}
-      </Layout>
-    </WindowContext.Provider>
+    <Layout>
+      {workflow.id === 'application-workflow' && (
+        <ApplicationWorkflow current={current} send={send} />
+      )}
+      {workflow.id === 'enable-ethereum' && <EnableEthereum current={current} send={send} />}
+      {workflow.id === 'approve-budget-and-fund' && (
+        <ApproveBudgetAndFund service={workflow.service} />
+      )}
+      {workflow.id === 'close-and-withdraw' && (
+        <CloseLedgerAndWithdraw service={workflow.service} />
+      )}
+    </Layout>
   );
 };
