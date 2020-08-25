@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import {interpret, Interpreter, State} from 'xstate';
+import {interpret, Interpreter, State, DefaultContext, EventObject} from 'xstate';
 import {Guid} from 'guid-typescript';
 import {
   StateChannelsNotification,
@@ -177,10 +177,10 @@ export class ChannelWallet {
     return workflow;
   }
 
-  private renderUI(machine) {
+  private renderUI(service: Interpreter<DefaultContext, any, EventObject, any>) {
     if (document.getElementById('root')) {
       ReactDOM.render(
-        React.createElement(WalletUi, {workflow: machine}),
+        React.createElement(WalletUi, {workflow: service}), // If this file were .tsx this would be <WalletUi workflow={service}/>
         document.getElementById('workflow-ui-container')
       );
     }
