@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import {interpret, Interpreter, State, DefaultContext, EventObject} from 'xstate';
+import {interpret, Interpreter, State} from 'xstate';
 import {Guid} from 'guid-typescript';
 import {
   StateChannelsNotification,
@@ -29,15 +29,13 @@ export interface Workflow {
   service: Interpreter<any, any, any>;
   domain: string; // TODO: Is this useful?
 }
-export class ChannelWallet {
-  public workflows: Workflow[];
-
+export class ChannelWallet extends React.Component<{}, {workflows: Workflow[]}> {
   constructor(
     private store: Store,
     private messagingService: MessagingServiceInterface,
     public id?: string
   ) {
-    this.workflows = [];
+    super({}, {workflows: []});
 
     // Whenever the store wants to send something call sendMessage
     store.outboxFeed.subscribe(async (m: Message) => {
@@ -82,11 +80,11 @@ export class ChannelWallet {
   }
 
   private isWorkflowIdInUse(workflowId: string): boolean {
-    return this.workflows.map(w => w.id).indexOf(workflowId) > -1;
+    return this.state.workflows.map(w => w.id).indexOf(workflowId) > -1;
   }
 
   public getWorkflow(workflowId: string): Workflow {
-    const workflow = this.workflows.find(w => w.id === workflowId);
+    const workflow = this.state.workflows.find(w => w.id === workflowId);
     if (!workflow) throw Error('Workflow not found');
     return workflow;
   }
@@ -167,23 +165,21 @@ export class ChannelWallet {
     }
     const service = interpret(machineConfig, {devTools})
       .onTransition((state, event) => ADD_LOGS && logTransition(state, event, workflowId))
-      .onDone(() => (this.workflows = this.workflows.filter(w => w.id !== workflowId)))
+      .onDone(() =>
+        this.setState({workflows: this.state.workflows.filter(w => w.id !== workflowId)})
+      )
       .start();
-    // TODO: Figure out how to resolve rendering priorities
-    this.renderUI(service);
+
+    // // TODO: Figure out how to resolve rendering priorities
+    // this.renderUI(service);
 
     const workflow = {id: workflowId, service, domain: 'TODO'};
-    this.workflows.push(workflow);
+    this.state.workflows.push(workflow);
     return workflow;
   }
 
-  private renderUI(service: Interpreter<DefaultContext, any, EventObject, any>) {
-    if (document.getElementById('root')) {
-      ReactDOM.render(
-        React.createElement(WalletUi, {workflow: service}), // If this file were .tsx this would be <WalletUi workflow={service}/>
-        document.getElementById('workflow-ui-container')
-      );
-    }
+  render() {
+    return <WalletUi workflows={this.state.workflows} />;
   }
 
   public async pushMessage(jsonRpcMessage: object, fromDomain: string) {
@@ -235,3 +231,5 @@ export function logTransition(state: State<any, any, any, any>, event, id?: stri
     }
   });
 }
+
+ReactDOM.render(<ChannelWallet />, document.getElementById('channel-wallet-container'));
