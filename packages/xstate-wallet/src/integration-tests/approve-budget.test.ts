@@ -59,7 +59,7 @@ it('allows for a wallet to approve a budget and fund with the hub', async () => 
   //   fakeChain;
   //   expect(playerA.workflowState).toEqual('waitForUserApproval');
   // }, 3000);
-  playerA.channelWallet.workflows[0].service.send({type: 'USER_APPROVES_BUDGET'});
+  playerA.channelWallet.state.workflows[0].service.send({type: 'USER_APPROVES_BUDGET'});
 
   await createBudgetPromise;
 

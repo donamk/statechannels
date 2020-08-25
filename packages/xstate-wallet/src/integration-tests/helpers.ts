@@ -63,7 +63,7 @@ export class Player {
 
       .start();
 
-    this.channelWallet.workflows.push({id: workflowId, service, domain: 'TODO'});
+    this.channelWallet.state.workflows.push({id: workflowId, service, domain: 'TODO'});
   }
   startCreateAndFundLedger(context: CreateAndFundLedger.WorkflowContext) {
     const workflowId = Guid.create().toString();
@@ -77,7 +77,9 @@ export class Player {
 
       .start();
 
-    this.channelWallet.workflows.push({id: workflowId, service, domain: 'TODO'});
+    this.channelWallet.setState({
+      workflows: [...this.channelWallet.state.workflows, {id: workflowId, service, domain: 'TODO'}]
+    });
   }
   startAppWorkflow(startingState: string, context: App.WorkflowContext) {
     const workflowId = Guid.create().toString();
@@ -88,13 +90,16 @@ export class Player {
       .onTransition((state, event) => ADD_LOGS && logTransition(state, event, this.id))
       .start(startingState);
 
-    this.channelWallet.workflows.push({id: workflowId, service, domain: 'TODO'});
+    this.channelWallet.setState({
+      workflows: [...this.channelWallet.state.workflows, {id: workflowId, service, domain: 'TODO'}]
+    });
   }
+
   get workflowMachine(): Interpreter<any, any, any, any> | undefined {
-    return this.channelWallet.workflows[0]?.service;
+    return this.channelWallet.state.workflows[0]?.service;
   }
   get workflowState(): string | object | undefined {
-    return this.channelWallet.workflows[0]?.service.state.value;
+    return this.channelWallet.state.workflows[0]?.service.state.value;
   }
   get destination() {
     return makeDestination('0x63E3FB11830c01ac7C9C64091c14Bb6CbAaC9Ac7');
